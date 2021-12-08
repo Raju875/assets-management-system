@@ -153,7 +153,7 @@
                 success: function (response) {
 
                     if (response.success == false) {
-                        toastr.error('Something went wring! Try again.')
+                        toastr.error(response.message, 'Error!')
 
                     } else if (response.error == true) {
                         toastr.error(response.message, 'Error!')

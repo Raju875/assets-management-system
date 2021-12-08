@@ -110,6 +110,12 @@ class AllocateController extends Controller
 
     public function getUserByDepartment(Request $request)
     {
+        if (!ACL::getAccsessRight($this->module_name, 'R')) {
+            return CommonFunction::dataResponse(false, '',
+                'You have no access right! Please contact admin for more information. [Aol.C-0015]',
+                201);
+        }
+
         try {
             $users = User::where('dept_id', $request->dept_id)->orderBy('id', 'desc')->pluck('name', 'id')->toArray();
 
@@ -131,7 +137,7 @@ class AllocateController extends Controller
     public function assignAssetStore(Request $request)
     {
         if (!ACL::getAccsessRight($this->module_name,'A')) {
-            return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [Aol.C-0015']);
+            return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [Aol.C-0020']);
         }
 
         try {

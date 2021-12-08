@@ -19,7 +19,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->module_name = 'Category';
+        $this->module_name = 'Asset-Category';
     }
 
     /**
@@ -89,7 +89,7 @@ class CategoryController extends Controller
     public function categoryStore(Request $request)
     {
         $category_id = (isset($request->category_id) ? $request->category_id : '');
-        if (!ACL::getAccsessRight($this->module_name, $category_id ? 'A' : 'UP')) {
+        if (!ACL::getAccsessRight($this->module_name, $category_id ? 'UP' : 'A')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [CC-0015]']);
         }
 

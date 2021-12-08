@@ -88,7 +88,7 @@ class AssetController extends Controller
 
     public function subCategoryByCategory(Request $request)
     {
-        if (!ACL::getAccsessRight($this->module_name, 'A')) {
+        if (!ACL::getAccsessRight($this->module_name, 'R')) {
             return CommonFunction::dataResponse(false, '',
                 'You have no access right! Please contact admin for more information. [UC-0015]',
                 201);
@@ -115,7 +115,7 @@ class AssetController extends Controller
     public function store(Request $request)
     {
         $asset_id = (isset($request->asset_id) ? $request->asset_id : '');
-        if (!ACL::getAccsessRight($this->module_name, $asset_id ? 'A' : 'UP')) {
+        if (!ACL::getAccsessRight($this->module_name, $asset_id ? 'UP' : 'A')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [AC-0020]']);
         }
 

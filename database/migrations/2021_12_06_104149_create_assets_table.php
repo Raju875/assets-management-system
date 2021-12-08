@@ -17,7 +17,7 @@ class CreateAssetsTable extends Migration
             $table->id();
             $table->integer('cat_id');
             $table->integer('sub_cat_id')->nullable();
-            $table->string('name', '100');
+            $table->string('name', '100')->unique();
             $table->integer('quantity')->default(0);
             $table->tinyInteger('status')->default(1)->comment('0=inactive, 1=active');
             $table->timestamps();

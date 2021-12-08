@@ -79,7 +79,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $department_id = (isset($request->department_id) ? $request->department_id : '');
-        if (!ACL::getAccsessRight($this->module_name,$department_id ? 'A' : 'UP')) {
+        if (!ACL::getAccsessRight($this->module_name,$department_id ? 'UP' : 'A')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [DC-0015]']);
         }
 

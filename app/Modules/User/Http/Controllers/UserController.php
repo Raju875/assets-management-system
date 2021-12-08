@@ -110,7 +110,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user_id = (isset($request->user_id) ? $request->user_id : '');
-        if (!ACL::getAccsessRight($this->module_name, $user_id ? 'A' : 'UP')) {
+
+        if (!ACL::getAccsessRight($this->module_name, $user_id ? 'UP' : 'A')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [UC-0015]']);
         }
 
@@ -121,7 +122,7 @@ class UserController extends Controller
         // rules
         $rules['name'] = 'required|unique:users,name' . ($user_id ? ",$user_id" : '');
         $rules['email'] = 'required|unique:users,email' . ($user_id ? ",$user_id" : '');
-        $rules['dept_id'] = 'required';
+        $rules['dept_id'] = (Auth::user()->role_id = 1) ? '' : 'required';
         $rules['status'] = 'required';
 
         // custom message
@@ -139,14 +140,12 @@ class UserController extends Controller
             DB::beginTransaction();
 
             $userData = User::findOrNew($user_id);
-
             $userData->name = $request->name;
             $userData->email = $request->email;
-            $userData->role_id = 2; // 1=admin, 2=employee
-            $userData->password = Hash::make('password');
+            $userData->role_id = $user_id ? $userData->role_id : 2; // 1=admin, 2=employee
+            $userData->password = $user_id ? $userData->password : Hash::make('password');
             $userData->dept_id = $request->dept_id;
             $userData->status = $request->status;
-
             $userData->save();
 
             DB::commit();
@@ -170,7 +169,15 @@ class UserController extends Controller
         $page_title = $this->module_name;
         try {
             $user_by_id = User::find($id);
-            $departments = ['' => '--Select department--'] + Department::where('status', 1)->orderBy('id', 'desc')->pluck('name', 'id')->toArray();
+            $query = Department::where('status', 1);
+
+            if (Auth::user()->role_id == 1) {
+                $query->orderBy('id', 'desc');
+            } else {
+                $query->where('id', Auth::user()->dept_id);
+            }
+            $departments = ['' => '--Select department--'] + $query->pluck('name', 'id')->toArray();
+
             return view('User::edit', compact('page_title', 'user_by_id', 'departments'));
 
         } catch (\Exception $e) {

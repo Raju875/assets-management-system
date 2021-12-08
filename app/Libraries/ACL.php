@@ -31,10 +31,8 @@ class ACL
 
         switch ($module) {
             case 'Dashboard':
-                if (in_array($user_role, [1])) {
+                if (in_array($user_role, [1, 2])) {
                     $accessRight = 'V-R';
-                } elseif (in_array($user_role, [2])) {
-                    $accessRight = 'V';
                 }
                 break;
 
@@ -58,7 +56,7 @@ class ACL
                 }
                 break;
 
-            case 'Category':
+            case 'Asset-Category':
                 if (in_array($user_role, [1])) {
                     $accessRight = '-A-V-E-R-UP';
                 }

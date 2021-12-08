@@ -156,6 +156,8 @@
                         $('#sub_cat_id').removeClass('required');
                         $('#sub_cat_id').html('');
 
+                        toastr.error(response.message, 'Error!')
+
                     } else if (response.error == true) {
                         $('#sub_cat_id_div').hide('slow');
                         $('#sub_cat_id').removeClass('required');
