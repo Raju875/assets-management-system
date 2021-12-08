@@ -1,0 +1,12 @@
+.navbar-nav > .user-menu  {
+    margin: 0px 15px;
+}
+.navbar-nav > .user-menu > .dropdown-menu > li.user-header {
+    background-color: #17a2b8;
+}
+.navbar-nav > .user-menu > .dropdown-menu > .user-footer {
+    border: 1px solid #3aa8d8;
+}
+.dropdown-toggle::after{
+    display: none;
+}

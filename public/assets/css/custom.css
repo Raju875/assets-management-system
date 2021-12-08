@@ -1,0 +1,8 @@
+.app-page{
+    background: #e9ecef;
+}
+
+.required-star:after {
+    color: red;
+    content: " *";
+}
