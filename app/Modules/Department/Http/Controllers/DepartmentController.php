@@ -53,7 +53,6 @@ class DepartmentController extends Controller
                 ->addIndexColumn()
                 ->rawColumns(['status', 'action'])
                 ->make(true);
-
         } catch (\Exception $e) {
             Session::flash('error', CommonFunction::showErrorPublic($e->getMessage()) . '[DC-1001]');
             return Redirect::back();
@@ -69,7 +68,6 @@ class DepartmentController extends Controller
         try {
             $page_title = $this->module_name;
             return view("Department::add", compact('page_title'));
-
         } catch (\Exception $e) {
             Session::flash('error', CommonFunction::showErrorPublic($e->getMessage()) . '[DC-1005]');
             return Redirect::back();
@@ -79,7 +77,7 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $department_id = (isset($request->department_id) ? $request->department_id : '');
-        if (!ACL::getAccsessRight($this->module_name,$department_id ? 'UP' : 'A')) {
+        if (!ACL::getAccsessRight($this->module_name, $department_id ? 'UP' : 'A')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [DC-0015]']);
         }
 
@@ -105,13 +103,14 @@ class DepartmentController extends Controller
             $departmentData = Department::findOrNew($department_id);
             $departmentData->name = $request->name;
             $departmentData->status = $request->status;
+            $departmentData->created_by = 0;
+            $departmentData->updated_by = 0;
             $departmentData->save();
 
             DB::commit();
 
             Session::flash('success', 'Data is stored successfully!');
             return redirect()->route('department-list');
-
         } catch (\Exception $e) {
             DB::rollback();
             Session::flash('error', CommonFunction::showErrorPublic($e->getMessage()) . '[DC-1010]');
@@ -121,14 +120,13 @@ class DepartmentController extends Controller
 
     public function edit($id)
     {
-        if (!ACL::getAccsessRight($this->module_name,'E')) {
+        if (!ACL::getAccsessRight($this->module_name, 'E')) {
             return Redirect::back()->with(['error' => 'You have no access right! Please contact admin for more information. [DC-0020]']);
         }
         $page_title = $this->module_name;
         try {
             $department_by_id = Department::find($id);
             return view('Department::edit', compact('page_title', 'department_by_id'));
-
         } catch (\Exception $e) {
             Session::flash('error', CommonFunction::showErrorPublic($e->getMessage()) . '[DC-1015]');
             return Redirect::back();
